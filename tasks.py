@@ -5,23 +5,23 @@ import numpy as np
 # Don't import additional packages. Numpy suffices.
 
 # [A] List Comprehensions and String Manipulation: Tokenization
-#     Objective: Practice list comprehensions and basic string operations: split a sentence 
-#                into individual words and use list comprehensions to make the code cleaner 
+#     Objective: Practice list comprehensions and basic string operations: split a sentence
+#                into individual words and use list comprehensions to make the code cleaner
 #                and more readable.
 
-# List comprehension provides a concise way to create lists by embedding a for-loop inside 
+# List comprehension provides a concise way to create lists by embedding a for-loop inside
 # square brackets.
 # Syntax: [expression for item in iterable if condition] (condition is optional).
 # Example: squares = [x**2 for x in range(10) if x % 2 == 0]
 
-# Large language models work with "tokens," which are the basic units of text (often words or subwords). 
-# Tokenization is the process of breaking down sentences into these tokens. In this exercise, you’ll 
+# Large language models work with "tokens," which are the basic units of text (often words or subwords).
+# Tokenization is the process of breaking down sentences into these tokens. In this exercise, you’ll
 # create a simple tokenizer to split a sentence into words and remove punctuation.
 
 
 
-# Task 1: Given a paragraph of text, implement a simple "tokenizer" that splits the paragraph 
-#   into individual words (tokens) and removes any punctuation. Implement this using a list 
+# Task 1: Given a paragraph of text, implement a simple "tokenizer" that splits the paragraph
+#   into individual words (tokens) and removes any punctuation. Implement this using a list
 #   comprehension.
 
 # Your code here:
@@ -29,7 +29,7 @@ import numpy as np
 text = "The quick brown fox jumps over the lazy dog!"
 
 # Write a list comprehension to tokenize the text and remove punctuation
-tokens = _ # Your code here
+tokens = [word.strip(string.punctuation) for word in text.split()]
 
 # Expected output: ['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']
 print(tokens)
@@ -38,14 +38,18 @@ print(tokens)
 
 
 
-# Task 2: Create a function that takes a string and breaks it up into tokens and removes any 
-#   punctuation, and then converts each token to lowercase. The function should returns unique 
+# Task 2: Create a function that takes a string and breaks it up into tokens and removes any
+#   punctuation, and then converts each token to lowercase. The function should returns unique
 #   words in alphabetical order.
 
 # Your code here:
 # -----------------------------------------------
 def tokenize(string: str) -> list:
-    pass # Your code
+    tokens = [word.strip(string.punctuation) for word in string.split()]
+    lowercase = tokens.lower()
+    unique = set(lowercase)
+    ordered_unique = sorted(unique)
+    return ordered_unique
 
 
 # -----------------------------------------------
@@ -59,17 +63,17 @@ def tokenize(string: str) -> list:
 # Syntax: {key: value for item in iterable if condition} (condition is optional).
 # Example: char_count = {char: ord(char) for char in "hello" if char != 'e'}
 
-# Once tokens are extracted, a common task in NLP is to count how often each word appears. 
-# This is called calculating the frequency of tokens, and it’s useful because words that appear 
-# frequently might have different importance compared to rare words. In this exercise, you’ll 
+# Once tokens are extracted, a common task in NLP is to count how often each word appears.
+# This is called calculating the frequency of tokens, and it’s useful because words that appear
+# frequently might have different importance compared to rare words. In this exercise, you’ll
 # create a dictionary where each word is a key and its frequency (count) is the value.
 
 
 
-# Task 3: Using the tokens list from the previous exercise, create a dictionary comprehension 
+# Task 3: Using the tokens list from the previous exercise, create a dictionary comprehension
 #   that counts the frequency of each word.
 
-# Using the list of tokens from Exercise 1, count the frequency of each word within one 
+# Using the list of tokens from Exercise 1, count the frequency of each word within one
 # dictionary comprehension
 
 # Your code here:
@@ -101,16 +105,16 @@ all(text_hist[key] == value for key, value in token_counts(text).items())
 
 
 # [C] Sets & Dictionary comprehension: Mapping unique tokens to numbers and vice versa
-#   Objective: Practice dictionary comprehensions and create mappings from tokens to unique 
+#   Objective: Practice dictionary comprehensions and create mappings from tokens to unique
 #              numerical IDs and back.
 
-# Once tokens are created, they often need to be converted to numerical representations 
+# Once tokens are created, they often need to be converted to numerical representations
 # for use in models. Two essential mappings are:
 #
 # Token to ID: Maps each token to a unique number.
 # ID to Token: Maps each unique number back to its corresponding token.
 #
-# These mappings are necessary for transforming text data into numerical data that models can 
+# These mappings are necessary for transforming text data into numerical data that models can
 # process. In this exercise, you’ll use dictionary comprehensions to create these mappings.
 
 
@@ -135,7 +139,7 @@ print(token_to_id)
 # -----------------------------------------------
 id_to_token = _ # Your code here
 
-# tests: 
+# tests:
 # test 1
 assert id_to_token[token_to_id['dog']] == 'dog'
 # test 2
@@ -147,7 +151,7 @@ assert all(id_to_token[token_to_id[key]]==key for key in token_to_id) and all(to
 
 
 # Task 7: Define a function that will take a list of strings ('documents'), determines all the
-#   unique tokens across all documents, and returns two dictionaries: one (token2int) that maps 
+#   unique tokens across all documents, and returns two dictionaries: one (token2int) that maps
 #   each unique token to a unique integer, and a dictionary (int2token) that maps each integer
 #   to the corresponding token in the first dictionary
 
@@ -220,10 +224,10 @@ np.all(sigmoid(np.log([1, 1/3, 1/7])) == np.array([1/2, 1/4, 1/8]))
 # o[t] = B a[t]
 #
 # All the multiplications here are matrix-vector multiplications (i.e., W, U and B
-# are matrices, and x[t] and a[t] are vectors). 
+# are matrices, and x[t] and a[t] are vectors).
 # To implement an RNN layer, these equations need to be implemented. The values
-# that define the matrices need to be passed to the layer. 
-# 
+# that define the matrices need to be passed to the layer.
+#
 
 # And implementation in R may look as follows:
 #
@@ -252,17 +256,17 @@ np.all(sigmoid(np.log([1, 1/3, 1/7])) == np.array([1/2, 1/4, 1/8]))
 # 	outputs
 # }
 
-# In this implementation 
+# In this implementation
 # w:                 is a single vector containing the flattened weights for the matrices  W ,  U , and  B .
-# list_of_sequences: is a list where each element is a sequence represented as a matrix ( X ), 
+# list_of_sequences: is a list where each element is a sequence represented as a matrix ( X ),
 #                    where rows are time steps and columns are input features.
 # sigma:             An optional activation function (default is the sigmoid function plogis).
 # 1. Setup: Splits the vector w into three matrices ( W, U, B ).
 #       and determines the number of sequences to process.
-# 2. Iterate Over Sequences: For each sequence in list_of_sequences 
+# 2. Iterate Over Sequences: For each sequence in list_of_sequences
 #      the sequence matrix  X is extracted and processed by
 #      • first initializing the hidden state  a  to zero (vector of the same size as a row of  X).
-#      • then, for each time step (each row in  X ) the hidden state  a[t] is updated using the RNN 
+#      • then, for each time step (each row in  X ) the hidden state  a[t] is updated using the RNN
 #        formula:  a[t] = W  x[t] + U a[t-1].
 # 4. Compute Output: After processing all time steps of the sequence, the output value is
 #      computed using final hidden state using the the equation o = B a[T] and is
@@ -281,7 +285,7 @@ def rnn_layer(w: np.array, list_of_sequences: list[np.array], sigma=sigmoid ) ->
 # Test
 np.random.seed(10)
 list_of_sequences = [np.random.normal(size=(5,3)) for _ in range(100)]
-wstart = np.random.normal(size=(3*3 + 3*3 + 3)) 
+wstart = np.random.normal(size=(3*3 + 3*3 + 3))
 o = rnn_layer(wstart, list_of_sequences)
 o.shape == (100,) and o.mean().round(3) == 16.287 and o.std().astype(int) == 133
 # -----------------------------------------------
@@ -334,8 +338,8 @@ data = macrodata.load_pandas().data
 X = np.hstack([np.ones((len(data),1)), data[['cpi','unemp']].values]) # Features: CPI and unemployment
 y = data['infl'].values # Target: inflation
 
-# Next we want to prepare a dataset for training sequence-based models like RNNs. We create 
-# input-output pairs where each input is a sequence of seq_len time steps from X, and the output 
+# Next we want to prepare a dataset for training sequence-based models like RNNs. We create
+# input-output pairs where each input is a sequence of seq_len time steps from X, and the output
 # is the corresponding target value y at the next time step after the sequence.
 
 seq_len = 7 # Define the length of each input sequence (we choose 7 consecutive time steps).
@@ -350,14 +354,14 @@ data_pairs = [(X[i:i+seq_len], y[i+seq_len]) for i in range(len(X)-seq_len)]
 
 list_of_sequences, yy = list(zip(*data_pairs))
 
-# Here, the zip(*...) is used for transposing a list of tuples. It splits the tuple pairs into 
+# Here, the zip(*...) is used for transposing a list of tuples. It splits the tuple pairs into
 # two separate lists:
 # First list: all input sequences (X[i:i+seq_len])
 # Second list: all target values (y[i+seq_len])
-# The * operator in Python unpacks the list elements into separate arguments for the zip() 
-# function. E.g., func(*[2,4,5]) is the same as func(2,4,5). 
+# The * operator in Python unpacks the list elements into separate arguments for the zip()
+# function. E.g., func(*[2,4,5]) is the same as func(2,4,5).
 
-# Now we are ready to fit the RNN to the data set. We need to load the optimization routine 
+# Now we are ready to fit the RNN to the data set. We need to load the optimization routine
 # 'minimize' from the scipy.optimize module
 
 from scipy.optimize import minimize
@@ -366,15 +370,15 @@ from scipy.optimize import minimize
 fit = minimize(rnn_loss, wstart, args=(list_of_sequences, yy), method='BFGS')
 print(fit)
 
-# The 'success' component in fit may be false, and this is due to a loss of computational 
-# precision. For now we'll just settle for the weights it has found so far. 
+# The 'success' component in fit may be false, and this is due to a loss of computational
+# precision. For now we'll just settle for the weights it has found so far.
 
 # To evaluate the fit we can compute the correlation between the values predicted by the
 # RNN and the true values
 pred = rnn_layer(fit['x'], list_of_sequences)
 np.corrcoef(pred,yy)
 
-# How good is this? To gage the performance of the RNN we'll compare it to a linear 
+# How good is this? To gage the performance of the RNN we'll compare it to a linear
 # regression with the same data
 Z = X[:len(yy)] # features corresponding to elements in yy at the previous time step
 linreg_coefs = np.linalg.lstsq(Z, yy, rcond=None)[0] # rcond=None suppresses warning message
@@ -382,7 +386,7 @@ linreg_pred = Z @ linreg_coefs
 np.corrcoef(linreg_pred, yy)
 
 # The correlation of the RNN predicted values is substantially higher! But it also has
-# many more parameters, and so is more flexible. 
+# many more parameters, and so is more flexible.
 
 # To visualize the difference in performance we plot the true values and predicted values
 import matplotlib.pyplot as plt
@@ -391,5 +395,3 @@ plt.plot(yy)
 plt.plot(pred)
 plt.plot(linreg_pred)
 plt.legend(['Truth','RNN','LinReg'])
-
-
