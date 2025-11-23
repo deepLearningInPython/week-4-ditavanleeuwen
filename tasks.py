@@ -46,8 +46,7 @@ print(tokens)
 # -----------------------------------------------
 def tokenize(string: str) -> list:
     tokens = [word.strip("#$%&'()*+,-./:;<=>?!@[\]^_`{|}~").lower() for word in string.split()]
-    unique = list(set(tokens))
-    ordered_unique = sorted(unique)
+    ordered_unique = sorted(set(tokens))
     return ordered_unique
 
 tokens = tokenize(text)
@@ -78,13 +77,13 @@ tokens = tokenize(text)
 # Your code here:
 # -----------------------------------------------
 tokens = [word.strip("#$%&'()*+,-./:;<=>?!@[\]^_`{|}~").lower() for word in text.split()]
-word_frequencies = {token:tokens.count(token) for token in tokens}
+word_frequencies = {token:tokens.count(token) for token in set(tokens)}
 
 # Expected output example: {'the': 2, 'quick': 1, ...}
 print(word_frequencies)
 
 # Modify the comprehension to include only words that appear more than once.
-word_frequencies = {token:tokens.count(token) for token in tokens if tokens.count(token) > 1}
+word_frequencies = {token:tokens.count(token) for token in set(tokens) if tokens.count(token) > 1}
 print(word_frequencies)
 # -----------------------------------------------
 
@@ -97,7 +96,7 @@ print(word_frequencies)
 # -----------------------------------------------
 def token_counts(string: str, k: int = 0) -> dict:
     tokens = [word.strip("#$%&'()*+,-./:;<=>?!@[\]^_`{|}~").lower() for word in string.split()]
-    freq_dic = {token:tokens.count(token) for token in tokens if tokens.count(token) > k}
+    freq_dic = {token:tokens.count(token) for token in set(tokens) if tokens.count(token) > k}
     return freq_dic
 
 #test:
@@ -129,12 +128,11 @@ all(text_hist[key] == value for key, value in token_counts(text).items())
 
 # Your code here:
 # -----------------------------------------------
-token_to_id = {token:idx for idx, token in enumerate(set(tokens))}
+token_to_id = {token:idx for idx, token in enumerate(sorted(set(tokens)))}
 
 # Expected output: {'dog': 0, 'quick': 1, 'fox': 2, 'the': 3, 'over': 4, 'lazy': 5, 'brown': 6, 'jumps': 7}
 print(token_to_id)
 # -----------------------------------------------
-
 
 
 # Task 6: Define a dictionary that reverses the maping in `token2int`
@@ -169,8 +167,9 @@ def make_vocabulary_map(documents: list) -> tuple:
     # Hint: use your tokenize function
     tokens = []
     for document in documents:
-        tokens += tokenize(document)
-    token2int = {token:idx for idx, token in enumerate(tokens)}
+        tokens.extend(tokenize(document))
+    unique_tokens = sorted(set(tokens))
+    token2int = {token:idx for idx, token in enumerate(unique_tokens)}
     int2token = {idx:token for token, idx in token2int.items()}
     return token2int, int2token
 
@@ -192,41 +191,45 @@ all(i2t[t2i[tok]] == tok for tok in t2i) # should be True
 # -----------------------------------------------
 def tokenize_and_encode(documents: list) -> list:
     # Hint: use your make_vocabulary_map and tokenize function
-      
-    return encoded_docs, token_to_id, id_to_token
+    token_to_id, id_to_token = make_vocabulary_map(documents)
+    encoded_docs = []
+    for doc in documents:
+        tokens = tokenize(doc)
+        encoded_docs.append([token_to_id[token] for token in tokens])
+    return [encoded_docs, token_to_id, id_to_token]
 
 # Test:
-#enc, t2i, i2t = tokenize_and_encode([text, 'What a luck we had today dog!'])
-print(tokenize_and_encode([text, 'dog What a luck we had today!'], token_to_id))
-#" | ".join([" ".join(i2t[i] for i in e) for e in enc]) == 'the quick brown fox jumps over the lazy dog | what a luck we had today'
+enc, t2i, i2t = tokenize_and_encode([text, 'What a luck we had today!'])
+print(tokenize_and_encode([text, 'What a luck we had today!']))
+" | ".join([" ".join(i2t[i] for i in e) for e in enc]) == 'the quick brown fox jumps over the lazy dog | what a luck we had today'
 # -----------------------------------------------
-# #
-# #
-# #
-# # # In the following set of exercises you're going to implement an RNN from scratch. You'll also
-# # # fit it to an existing time series.
-# #
-# #
-# # # [D] Using a lambda expression to define functions: One line definition of a function
-# # # Objective: practicing to work with lambda functions
-# #
-# # # You'll implement a RNN with the logistic (sigmoid) activation function for
-# # # the nodes. We need to implement this function first.
-# #
-# #
-# #
-# # # Task 9: use a lambda function to implement the logistic function using the np.exp
-# # #   function to work elementwise with numpy arrays
-# #
-# # # Your code here:
-# # # -----------------------------------------------
-# # sigmoid = lambda array: 1 / (1 + np.exp(-array))
-# #
-# # # Test:
-# # np.all(sigmoid(np.log([1, 1/3, 1/7])) == np.array([1/2, 1/4, 1/8]))
-# # # -----------------------------------------------
-# #
-# #
+
+
+
+# In the following set of exercises you're going to implement an RNN from scratch. You'll also
+# fit it to an existing time series.
+
+
+# [D] Using a lambda expression to define functions: One line definition of a function
+# Objective: practicing to work with lambda functions
+
+# You'll implement a RNN with the logistic (sigmoid) activation function for
+# the nodes. We need to implement this function first.
+
+
+
+# Task 9: use a lambda function to implement the logistic function using the np.exp
+#   function to work elementwise with numpy arrays
+
+# Your code here:
+# -----------------------------------------------
+sigmoid = lambda array: 1 / (1 + np.exp(-array))
+
+# Test:
+np.all(sigmoid(np.log([1, 1/3, 1/7])) == np.array([1/2, 1/4, 1/8]))
+# -----------------------------------------------
+
+
 # # ################  O P T I O N A L  ##############
 # #
 # #
